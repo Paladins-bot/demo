@@ -1,0 +1,21 @@
+apt-get update && apt-get install -y task-samba-dc
+Так как Samba в режиме контроллера домена (Domain Controller, DC) использует свой сервер LDAP, свой центр распределения ключей Kerberos и свой сервер DNS (если не включен плагин BIND9_DLZ), перед установкой необходимо остановить конфликтующие службы krb5kdc и slapd, а также bind:
+for service in smb nmb krb5kdc slapd bind; 
+do 
+  systemctl disable $service --now; 
+done
+Восстановление к начальному состоянию Samba:
+Необходимо очистить базы и конфигурацию Samba (домен, если он создавался до этого, будет удалён):
+rm -f /etc/samba/smb.conf
+rm -rf /var/lib/samba
+rm -rf /var/cache/samba
+mkdir -p /var/lib/samba/sysvol
+Создание домена одной командой:
+Создание контроллера домена au-team.irpo с паролем администратора P@ssw0rd:
+где:
+--realm — область Kerberos (LDAP), и DNS имя домена;
+--domain — имя домена (имя рабочей группы);
+--adminpass — пароль основного администратора домена;
+dns forwarder — внешний DNS-сервер;
+--server-role — тип серверной роли.
+samba-tool domain provision --realm=au-team.irpo --domain=au-team --adminpass='P@ssw0rd' --dns-backend=SAMBA_INTERNAL --option="dns forwarder=77.88.8.8" --server-rol

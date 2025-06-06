@@ -1,0 +1,43 @@
+#isp
+
+apt-get install chrony
+vim /etc/chrony.conf
+
+File
+
+server 127.0.0.1 iburst
+local stratum 5
+allow 0.0.0.0/0
+
+systemctl restart chronyd
+
+#HQ-RTR
+
+hq-rtr(config)#ntp server 172.16.4.1
+hq-rtr(config)#write memory
+
+#BR-RTR
+
+br-rtr(config)#ntp server 172.16.5.1
+br-rtr(config)#write memory
+
+#HQ-CLI and HQ-srv
+
+vim /etc/chrony.conf
+
+File 
+server 172.16.4.1 iburst
+
+systemctl restart chronyd
+
+#BR-SRV
+
+vim /etc/chrony.conf
+
+File
+
+server 172.16.5.1 iburst
+
+systemctl restart chronyd
+
+

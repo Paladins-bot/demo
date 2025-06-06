@@ -1,0 +1,17 @@
+#BR-RTR
+
+br-rtr>enable
+br-rtr#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+br-rtr(config)#ip nat source static tcp 192.168.200.2 8080 172.16.5.14 80
+br-rtr(config)#ip nat source static tcp 192.168.200.2 2024 172.16.5.14 2024
+br-rtr(config)#write memory
+
+#HQ-RTR
+
+hq-rtr>enable
+hq-rtr#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+hq-rtr(config)#ip nat source static tcp 192.168.100.2 2024 172.16.4.14 2024
+hq-rtr(config)#write memory
+

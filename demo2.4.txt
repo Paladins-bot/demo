@@ -1,0 +1,29 @@
+#HQ-CLI
+
+systemctl enable --now sshd
+
+#HQ-RTR and BR-RTR
+
+hq-rtr(config)#security none 
+hq-rtr(config)#write memory
+
+br-rtr(config)#security none
+br-rtr(config)#write memory
+
+#BR-SRV
+
+apt-get install -y ansible sshpass
+
+vim /etc/ansible/ansible.cfg
+
+File
+ uncommit inventory
+host_key_checking = False
+
+vim /etc/ansible/hosts
+
+File
+
+HQ-RTR ansible_host=18.10.10.1 ansible_user=net_admin ansible_password=PC$$word ansible_connectio BR-RTR ansible_host=192.168.200.1 ansible_user=net_admin ansible_password=Pe$$word ansible_connec HQ-SRV ansible_host=192.168.100.2 ansible_user=sshuser ansible_password=P@ssword ansible_ssh_port HQ-CLI ansible_host=192.168.100.66 ansible_user=user ansible_password=resu
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3

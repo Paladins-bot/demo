@@ -1,0 +1,26 @@
+#BR-SRV
+
+apt-get install -y docker-{engine,compose-v2}
+systemctl enable --now docker.service
+vim ~/wiki.yml
+
+docker compose -f wiki.yml up -d
+
+check HQ-CLI
+http://<IP-address_BR-SRV>:8080
+
+scp user@192.168.100.66:~/Downloads/LocalSettings.php ./
+
+vim wiki.yml
+
+File
+
+- ./LocalSettings.php:/var/www/html/LocalSettings.php
+
+docker compose -f wiki.yml stop
+docker compose -f wiki.yml up -d
+
+#CLI
+
+testing
+

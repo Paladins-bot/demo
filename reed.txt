@@ -1,0 +1,3 @@
+delite folder - rm -rf demo
+delite git - apt-get remove git
+history clear - history -c

@@ -1,0 +1,74 @@
+#isp
+hostnamectl set-hostname isp; exec bash
+
+#HQ-RTR
+
+ecorouter>enable
+ecorouter#configure terminal 
+Enter configuration commands, one per line.  End with CNTL/Z.
+ecorouter(config)#hostname hq-rtr
+hq-rtr(config)#ip domain-name au-team.irpo
+hq-rtr(config)#write memory
+
+hq-rtr(config)#
+
+#HQ-SRV
+
+hostnamectl set-hostname hq-srv.au-team.irpo; exec bash
+
+#HQ-RTR
+
+hq-rtr(config)#interface isp
+hq-rtr(config-if)#ip address 172.16.4.14/28
+hq-rtr(config-if)#description "Connect ISP"
+hq-rtr(config-if)#exit
+hq-rtr(config)#
+hq-rtr(config)#ip route 0.0.0.0/0 172.16.4.1
+
+hq-rtr(config)#port te0
+hq-rtr(config-port)#service-instance te0/isp
+hq-rtr(config-service-instance)#encapsulation untagged 
+hq-rtr(config-service-instance)#connect ip interface isp 
+hq-rtr(config-service-instance)#exit
+hq-rtr(config-port)#exit
+hq-rtr(config)#write memory
+
+hq-rtr(config)#interface vl100
+hq-rtr(config-if)#description "Servers - vlan100"
+hq-rtr(config-if)#ip address 192.168.100.1/26
+hq-rtr(config-if)#exit
+hq-rtr(config)#
+hq-rtr(config)#interface vl200
+hq-rtr(config-if)#description "Clients - vlan200"
+hq-rtr(config-if)#ip address 192.168.100.65/28
+hq-rtr(config-if)#exit
+hq-rtr(config)#
+hq-rtr(config)#interface vl999
+hq-rtr(config-if)#description "Managements - vlan999"
+hq-rtr(config-if)#ip address 192.168.100.81/29
+hq-rtr(config-if)#exit
+
+hq-rtr(config)#port te1
+hq-rtr(config-port)#service-instance te1/vl100
+hq-rtr(config-service-instance)#encapsulation dot1q 100 exact 
+hq-rtr(config-service-instance)#rewrite pop 1
+hq-rtr(config-service-instance)#connect ip interface vl100
+
+2025-05-02 07:47:47      INFO      Interface vl100 changed state to up
+hq-rtr(config-service-instance)#exit
+hq-rtr(config-port)#service-instance te1/vl200
+hq-rtr(config-service-instance)#encapsulation dot1q 200 exact 
+hq-rtr(config-service-instance)#rewrite pop 1
+hq-rtr(config-service-instance)#connect ip interface vl200
+
+2025-05-02 07:48:14      INFO      Interface vl200 changed state to up
+hq-rtr(config-service-instance)#exit
+hq-rtr(config-port)#service-instance te1/vl999
+hq-rtr(config-service-instance)#encapsulation dot1q 999 exact 
+hq-rtr(config-service-instance)#rewrite pop 1
+hq-rtr(config-service-instance)#connect ip interface vl999
+
+2025-05-02 07:48:38      INFO      Interface vl999 changed state to up
+hq-rtr(config-service-instance)#exit
+hq-rtr(config-port)#exit
+hq-rtr(config)#write memory

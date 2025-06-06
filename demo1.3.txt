@@ -1,0 +1,18 @@
+#HQ-SRV
+
+systemctl enable --now iptables
+passwd sshuser
+usermod -aG wheel sshuser
+echo "sshuser ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+#HQ-RTR and BR-RTR
+
+hq-rtr>enable
+hq-rtr#configure terminal 
+Enter configuration commands, one per line.  End with CNTL/Z.
+hq-rtr(config)#username net_admin
+hq-rtr(config-user)#password P@$$word
+hq-rtr(config-user)#role admin 
+hq-rtr(config-user)#exit
+hq-rtr(config)#write memory
+

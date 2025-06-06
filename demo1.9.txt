@@ -1,0 +1,17 @@
+#HQ-RTR
+
+hq-rtr>enable
+hq-rtr#configure terminal 
+hq-rtr(config)#ip pool HQ 192.168.100.66-192.168.100.78
+hq-rtr(config)#dhcp-server 1
+hq-rtr(config-dhcp-server)#pool HQ 1
+hq-rtr(config-dhcp-server-pool)#mask 28
+hq-rtr(config-dhcp-server-pool)#gateway 192.168.100.65
+hq-rtr(config-dhcp-server-pool)#dns 192.168.100.2
+hq-rtr(config-dhcp-server-pool)#domain-name au-team.irpo
+hq-rtr(config-dhcp-server-pool)#exit
+hq-rtr(config-dhcp-server)#exit
+hq-rtr(config)#interface vl200 
+hq-rtr(config-if)#dhcp-server 1
+hq-rtr(config-if)#exit
+hq-rtr(config)#write memory

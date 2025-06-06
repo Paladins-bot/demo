@@ -1,0 +1,37 @@
+#HQ-RTR
+
+hq-rtr>enable
+hq-rtr#configure terminal 
+hq-rtr(config)#router ospf 1
+hq-rtr(config-router)#ospf router-id 10.10.10.1
+hq-rtr(config-router)#passive-interface default 
+hq-rtr(config-router)#no passive-interface tunnel.0 
+hq-rtr(config-router)#network 10.10.10.0/30 area 0
+hq-rtr(config-router)#network 192.168.100.0/26 area 0
+hq-rtr(config-router)#network 192.168.100.64/28 area 0
+hq-rtr(config-router)#network 192.168.100.80/29 area 0
+hq-rtr(config-router)#exit
+hq-rtr(config)#write memory
+hq-rtr(config)#interface tunnel.0 
+hq-rtr(config-if-tunnel)#ip ospf authentication message-digest
+hq-rtr(config-if-tunnel)#ip ospf message-digest-key 1 md5 P@ssw0rd
+hq-rtr(config-if-tunnel)#exit
+hq-rtr(config)#write memory
+
+#BR-RTR
+
+br-rtr#configure terminal 
+br-rtr(config)#router ospf 1
+br-rtr(config-router)#ospf router-id 10.10.10.2
+br-rtr(config-router)#passive-interface default 
+br-rtr(config-router)#no passive-interface tunnel.0 
+br-rtr(config-router)#network 10.10.10.0/30 area 0
+br-rtr(config-router)#network 192.168.200.0/27 area 0
+br-rtr(config-router)#exit
+br-rtr(config)#interface tunnel.0
+br-rtr(config-if-tunnel)#ip ospf authentication message-digest 
+br-rtr(config-if-tunnel)#ip ospf message-digest-key 1 md5 P@ssw0rd
+br-rtr(config-if-tunnel)#exit
+br-rtr(config)#write memory
+
+

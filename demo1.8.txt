@@ -1,0 +1,33 @@
+#HQ-RTR
+
+hq-rtr>enable
+hq-rtr#configure terminal
+hq-rtr(config)#interface isp 
+hq-rtr(config-if)#ip nat outside 
+hq-rtr(config-if)#exit
+hq-rtr(config)#interface vl100
+hq-rtr(config-if)#ip nat inside 
+hq-rtr(config-if)#exit
+hq-rtr(config)#interface vl200
+hq-rtr(config-if)#ip nat inside 
+hq-rtr(config-if)#exit
+hq-rtr(config)#interface vl999 
+hq-rtr(config-if)#ip nat inside 
+hq-rtr(config-if)#exit
+hq-rtr(config)#ip nat pool HQ 192.168.100.1-192.168.100.254
+hq-rtr(config)#ip nat source dynamic inside-to-outside pool HQ overload interface isp 
+hq-rtr(config)#write memory
+
+#BR-RTR
+
+br-rtr>enable
+br-rtr#configure terminal 
+br-rtr(config)#interface isp 
+br-rtr(config-if)#ip nat outside 
+br-rtr(config-if)#exit
+br-rtr(config)#interface BR-Net 
+br-rtr(config-if)#ip nat inside 
+br-rtr(config-if)#exit
+br-rtr(config)#ip nat pool BR 192.168.200.1-192.168.200.254
+br-rtr(config)#ip nat source dynamic inside-to-outside pool BR overload interface isp 
+br-rtr(config)#write memory

@@ -1,0 +1,23 @@
+#HQ-RTR
+
+hq-rtr>enable
+hq-rtr#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+hq-rtr(config)#interface tunnel.0
+hq-rtr(config-if-tunnel)#description "GRE-to-BR"
+hq-rtr(config-if-tunnel)#ip address 10.10.10.1/30
+hq-rtr(config-if-tunnel)#ip tunnel 172.16.4.14 172.16.5.14 mode gre
+hq-rtr(config-if-tunnel)#end
+hq-rtr#write memory
+
+#BR-RTR
+
+br-rtr>enable
+br-rtr#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+br-rtr(config)#interface tunnel.0
+br-rtr(config-if-tunnel)#description "GRE-to-HQ"
+br-rtr(config-if-tunnel)#ip address 10.10.10.2/30
+br-rtr(config-if-tunnel)#ip tunnel 172.16.5.14 172.16.4.14 mode gre
+br-rtr(config-if-tunnel)#end
+br-rtr#write memory

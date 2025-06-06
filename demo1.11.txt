@@ -1,0 +1,13 @@
+#HQ-RTR
+
+hq-rtr(config)#ntp timezone utc+3
+hq-rtr(config)#write memory
+
+#BR-RTR
+
+br-rtr(config)#ntp timezone utc+3
+br-rtr(config)#write memory
+
+#ISP and HQ-SRV and HQ-CLI and BR-SRV
+
+timedatectl set-timezone Europe/Moscow

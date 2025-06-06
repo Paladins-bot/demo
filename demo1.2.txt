@@ -1,0 +1,16 @@
+#isp
+
+mkdir /etc/net/ifaces/ens20
+mkdir /etc/net/ifaces/ens21
+
+echo "TYPE=eth" > /etc/net/ifaces/ens20/options
+echo "BOOTPROTO=static" >> /etc/net/ifaces/ens20/options
+
+cp /etc/net/ifaces/ens20/options /etc/net/ifaces/ens21/options
+echo "172.16.4.1/28" > /etc/net/ifaces/ens20/ipv4address
+echo "172.16.5.1/28" > /etc/net/ifaces/ens21/ipv4address
+
+apt-get update && apt-get install -y iptables
+iptables –t nat –A POSTROUTING –o ens19 –j MASQUERADE
+iptables-save >> /etc/sysconfig/iptables
+systemctl enable --now iptables

@@ -1,0 +1,11 @@
+#HQ-SRV and BR-SRV
+
+vim /etc/openssh/sshd_config
+
+Port 2024
+AllowUsers sshuser
+MaxAuthTries 2
+Banner /etc/openssh/banner
+
+echo "Authorized access only" > /etc/openssh/banner
+systemctl restart sshd

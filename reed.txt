@@ -1,2 +1,0 @@
-delite git - apt-get remove git
-history clear - history -c
